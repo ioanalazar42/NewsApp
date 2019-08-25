@@ -24,7 +24,7 @@ public class PublicationLoader extends AsyncTaskLoader<List<Publication>> {
      */
     public PublicationLoader(Context context, String requiredUrl) {
         super(context);
-        url = url;
+        url = requiredUrl;
     }
 
     @Override

@@ -6,10 +6,12 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.app.LoaderManager.LoaderCallbacks;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<List<Publication>>{
+        implements LoaderCallbacks<List<Publication>> {
 
     private static final String LOG_TAG = MainActivity.class.getName();
 
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity
     private static final int PUBLICATION_LOADER_ID = 1;
 
     /** URL for publications data */
-    private static final String REQUEST_URL = "http://content.guardianapis.com/search?q=debates&api-key=test";
+    private static final String REQUEST_URL = "http://content.guardianapis.com/search?q=debates&show-tags=contributor&api-key=test";
 
     /** TextView that is displayed when the list is empty or there is not internet connection*/
     private TextView emptyStateTextView;
@@ -100,6 +102,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public Loader<List<Publication>> onCreateLoader(int i, Bundle bundle) {
+
         // Create a new loader for the given URL
         return new PublicationLoader(this, REQUEST_URL);
     }
@@ -110,16 +113,15 @@ public class MainActivity extends AppCompatActivity
         View loadingIndicator = findViewById(R.id.loading_indicator);
         loadingIndicator.setVisibility(View.GONE);
 
-        // Set empty state text to display "No earthquakes found."
+        // Set empty state text to display "No publications found."
         emptyStateTextView.setText(R.string.no_data_found);
 
-        // Clear the adapter of previous earthquake data
+        // Clear the adapter of previous publication data
         adapter.clear();
 
         // If there is a valid list of {@link Publication}s, then add them to the adapter's
         // data set. This will update the ListView
         if (publications != null && !publications.isEmpty()) {
-
             adapter.addAll(publications);
         }
     }

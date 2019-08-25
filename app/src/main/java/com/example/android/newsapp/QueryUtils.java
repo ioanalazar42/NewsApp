@@ -112,7 +112,7 @@ public final class QueryUtils {
                 Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
+            Log.e(LOG_TAG, "Problem retrieving the publication JSON results.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -188,9 +188,18 @@ public final class QueryUtils {
                 // Extract the value for the key called "webUrl"
                 String url = currentPublication.getString("webUrl");
 
-                // Create a new {@link Earthquake} object with the magnitude, location, time,
-                // and url from the JSON response.
-                Publication publication = new Publication(title, section, url);
+                // Extract the value for the key called "webPublicationDate"
+                String date = currentPublication.getString("webPublicationDate");
+
+                // Extract the JSONArray that corresponds to the key tags
+                JSONArray tagsArray = currentPublication.getJSONArray("tags");
+                // Extract the JSONObject that corresponds to the 0th index
+                JSONObject tagsObject = tagsArray.getJSONObject(0);
+                // Extract the value for the key called "webTitle" which specifies the author
+                String author = tagsObject.getString("webTitle");
+
+                // Create a new {@link Publication} object with the title, section, url
+                Publication publication = new Publication(title, section, url, date, author);
 
                 // Add the new {@link Publication} to the list of publications.
                 publications.add(publication);

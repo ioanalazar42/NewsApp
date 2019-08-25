@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,7 +31,6 @@ public class PublicationAdapter extends ArrayAdapter<Publication> {
 
     /**
      * Returns a list item view that displays information about the publication
-     * at the given position in the list of earthquakes.
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -54,7 +55,27 @@ public class PublicationAdapter extends ArrayAdapter<Publication> {
         // Display the section that the current publication belongs to in that TextView
         sectionView.setText(currentPublication.getSection());
 
+        // Find the TextView with view ID section
+        TextView dateView = (TextView) listItemView.findViewById(R.id.date);
+        // Format the date string (i.e. "Jan 1, 1970")
+        String formattedDate = formatDate(currentPublication.getDate());
+        // Display the date of the current earthquake in that TextView
+        dateView.setText(formattedDate);
+
+
+        // Find the TextView with view ID author
+        TextView authorView = (TextView) listItemView.findViewById(R.id.author);
+        // Display the section that the current publication belongs to in that TextView
+        authorView.setText(currentPublication.getAuthor());
+
         // Return the list item view that is now showing the appropriate data
         return listItemView;
+    }
+
+    /**
+     * Return the formatted date string (i.e. "2019-07-10") from a Date object.
+     */
+    private String formatDate(String dateString) {
+       return dateString.substring(0, dateString.indexOf("T"));
     }
 }
